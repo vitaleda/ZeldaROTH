@@ -2665,11 +2665,11 @@ void Jeu::testFin() {
 }
 
 SDL_Surface* Jeu::loadImg(const char* image) {
-	char fImage[512];
+    char fImage[512];
 #ifdef __PSP2__
-	snprintf(fImage, sizeof(fImage), "%s/%s", "ux0:data/zroth", image);
+    snprintf(fImage, sizeof(fImage), "%s/%s", "ux0:data/zroth", image);
 #else
-	snprintf(fImage, sizeof(fImage), "%s", image);
+    snprintf(fImage, sizeof(fImage), "%s", image);
 #endif
-	return IMG_Load(fImage);
+    return IMG_Load(fImage);
 }
