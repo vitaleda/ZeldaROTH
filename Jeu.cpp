@@ -51,17 +51,50 @@ Jeu::~Jeu() {
 
 void Jeu::init(int save) {
     zone=21;
+    if (gpProjectile != NULL) {
+        delete gpProjectile;
+    }
     gpProjectile = new Projectile(this, 0, N, 0, 0, 0);
+    if (gpObjet != NULL) {
+        delete gpObjet;
+    }
     gpObjet = new Objet(this, 0, 0, 0, 0);
+    if (gpSnipe != NULL) {
+        delete gpSnipe;
+    }
     gpSnipe = new Snipe(this, 0, 0, 0, 0, 0);
+    if (gpCaisse != NULL) {
+        delete gpCaisse;
+    }
     gpCaisse = new Caisse(this, 0, 0, 0);
+    if (gpEnnemi != NULL) {
+        delete gpEnnemi;
+    }
     gpEnnemi = new Ennemi(this, 0, 0, 0, true);
+    if (gpPiege != NULL) {
+        delete gpPiege;
+    }
     gpPiege = new Ennemi(this, 0, 0, 0, true);
+    if (gpPnj != NULL) {
+        delete gpPnj;
+    }
     gpPnj = new Pnj(this, 0, 0, 0, 0);
+    if (gpJoueur != NULL) {
+        delete gpJoueur;
+    }
     gpJoueur = new Joueur(this, save);
+    if (gpMonde != NULL) {
+        delete gpMonde;
+    }
     gpMonde = new Monde(this);
+    if (gpMenu != NULL) {
+        delete gpMenu;
+    }
     gpMenu = new Menu(this);
     //gpTexte = new Texte(this);
+    if (gpStatut != NULL) {
+        delete gpStatut;
+    }
     gpStatut = new Statut(this);
     gpAudio->playMusic(zone);
     if (isDonjon()) ecrit(206+zone-12);
