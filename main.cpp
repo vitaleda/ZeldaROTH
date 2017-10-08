@@ -42,7 +42,7 @@ SDL_Surface* init() {             // initialise SDL
     SDL_ShowCursor(SDL_DISABLE);
 
 #ifdef __PSP2__
-    return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    return SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
 #endif
@@ -73,10 +73,7 @@ int main(int argc, char** argv) {
     int x = (960 - sw)/2;
     SDL_SetVideoModeScaling(x, 0, sw, sh);
 
-    SDL_Surface* gpScreen2 = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
-    sw = (float)gpScreen2->w*((float)sh/(float)gpScreen2->h);
-    x = (960 - sw)/2;
-    SDL_SetVideoModeScaling(x, 0, sw, sh);
+    SDL_Surface* gpScreen2 = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     SDL_Surface* gpScreen2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 320, 240, 32, 0, 0, 0, 0);
 #endif
@@ -146,10 +143,14 @@ int main(int argc, char** argv) {
             default : break;
         }
 
+#ifdef __PSP2__
+        SDL_BlitSurface(gpScreen2, &src, gpScreen, &dst);
+#else
         SDL_FreeSurface(gpScreen3);
         gpScreen3 = zoomSurface (gpScreen2, 2, 2, 0);
 
         SDL_BlitSurface(gpScreen3, &src, gpScreen, &dst);
+#endif
 
         SDL_Flip(gpScreen);
 
