@@ -62,12 +62,10 @@ target_link_libraries(${VITA_APPNAME}
   png
   vita2d
   z
-  SceAppMgr_stub
   SceAudio_stub
   SceCtrl_stub
   SceDisplay_stub
   SceGxm_stub
-  SceNetCtl_stub
   ScePower_stub
   SceSysmodule_stub
   SceTouch_stub
