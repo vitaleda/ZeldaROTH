@@ -71,6 +71,16 @@ target_link_libraries(${VITA_APPNAME}
   SceTouch_stub
 )
 
+file(GLOB_RECURSE ASSETS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} data/*)
+
+set(DATA "")
+
+FOREACH(ITEM ${ASSETS})
+  list(APPEND DATA "FILE")
+  list(APPEND DATA ${ITEM})
+  list(APPEND DATA ${ITEM})
+ENDFOREACH()
+
 # Create Vita artifacts
 vita_create_self(${VITA_APPNAME}.self ${VITA_APPNAME} SAFE)
 vita_create_vpk(${VITA_APPNAME}.vpk ${VITA_TITLEID} ${VITA_APPNAME}.self
@@ -80,4 +90,5 @@ vita_create_vpk(${VITA_APPNAME}.vpk ${VITA_TITLEID} ${VITA_APPNAME}.self
   FILE res/bg.png sce_sys/livearea/contents/bg.png
   FILE res/startup.png sce_sys/livearea/contents/startup.png
   FILE res/template.xml sce_sys/livearea/contents/template.xml
+  ${DATA}
 )

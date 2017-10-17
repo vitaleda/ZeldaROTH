@@ -1590,7 +1590,7 @@ void Monde::chargeMap(int zone) {
     std::ostringstream oss;
     oss << zone;
 #ifdef __PSP2__
-    std::string result = "ux0:data/zroth/data/map/carte" + oss.str() + ".map";
+    std::string result = "app0:data/map/carte" + oss.str() + ".map";
 #else
     std::string result = "data/map/carte" + oss.str() + ".map";
 #endif
