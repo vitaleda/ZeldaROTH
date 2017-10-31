@@ -1,7 +1,7 @@
 # Port of Zelda Time Return of the Hylian to PS Vita
 
 ## VPK
-Latest version is available [here](https://www.ferb.fr/vita/vpks/ZeldaROTH.vpk).
+Latest version is available [here](https://github.com/usineur/ZeldaROTH/releases).
 
 Note: saves can be found in `ux0:data/zroth/save` directory.
 
