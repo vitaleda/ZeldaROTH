@@ -2666,7 +2666,7 @@ void Jeu::testFin() {
 
 SDL_Surface* Jeu::loadImg(const char* image) {
     char fImage[512];
-#ifdef __PSP2__
+#ifdef __vita__
     snprintf(fImage, sizeof(fImage), "%s%s", "app0:", image);
 #else
     snprintf(fImage, sizeof(fImage), "%s", image);

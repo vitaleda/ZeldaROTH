@@ -17,7 +17,7 @@
 #include "Keyboard.h"
 #include "Generique.h"
 
-#ifdef __PSP2__
+#ifdef __vita__
 #include <psp2/power.h>
 #include <psp2/kernel/processmgr.h>
 #include <psp2/io/fcntl.h>
@@ -32,7 +32,7 @@ SDL_Surface* init() {             // initialise SDL
     atexit(SDL_Quit);
     //if(SDL_InitSubSystem(SDL_INIT_AUDIO) == -1) *SOUND = false;
 
-#ifndef __PSP2__
+#ifndef __vita__
     SDL_WM_SetCaption("Return of the Hylian",NULL);
     SDL_Surface* icon = SDL_LoadBMP("data/images/logos/triforce.ico");
     SDL_SetColorKey(icon,SDL_SRCCOLORKEY,SDL_MapRGB(icon->format,0,0,0));
@@ -41,7 +41,7 @@ SDL_Surface* init() {             // initialise SDL
 
     SDL_ShowCursor(SDL_DISABLE);
 
-#ifdef __PSP2__
+#ifdef __vita__
     return SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
@@ -49,7 +49,7 @@ SDL_Surface* init() {             // initialise SDL
 }
 
 int main(int argc, char** argv) {
-#ifdef __PSP2__
+#ifdef __vita__
     sceKernelPowerTick(SCE_KERNEL_POWER_TICK_DISABLE_AUTO_SUSPEND);
     scePowerSetArmClockFrequency(444);
 
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     int mode = 2; //mode=0;
 
     gpScreen = init();
-#ifdef __PSP2__
+#ifdef __vita__
     int sh = 544;
     int sw = (float)gpScreen->w*((float)sh/(float)gpScreen->h);
     int x = (960 - sw)/2;
@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
             default : break;
         }
 
-#ifdef __PSP2__
+#ifdef __vita__
         SDL_BlitSurface(gpScreen2, &src, gpScreen, &dst);
 #else
         SDL_FreeSurface(gpScreen3);

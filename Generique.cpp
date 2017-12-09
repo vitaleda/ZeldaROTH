@@ -376,7 +376,7 @@ void Generique::initAide1() {
     
     gpJeu->affiche(image, "HELP 1/2", 40, 16);
     
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Return to the game: Cross - Next: <", 24, 208);
 #else
     gpJeu->affiche(image, "Return to the game: Enter - Next: Right", 24, 208);
@@ -385,7 +385,7 @@ void Generique::initAide1() {
     int ligne = 64;
     Joueur* gpJoueur = gpJeu->getJoueur();
     
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Read / Open / Speak: Circle", 24, ligne); ligne+=16;
     gpJeu->affiche(image, "Confirm / Pass text: Cross", 24, ligne); ligne+=16;
 #else
@@ -394,14 +394,14 @@ void Generique::initAide1() {
 #endif
     gpJeu->affiche(image, "Move Link: Left stick", 24, ligne); ligne+=16;
     if (gpJoueur->hasObjet(O_BOTTES)) {
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "Run : L (lock) / R", 24, ligne);
 #else
         gpJeu->affiche(image, "Run : Shift hold or Caps lock", 24, ligne); 
 #endif
         ligne+=16;}
     if (gpJoueur->getEpee()) {
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "Use sword: Square", 24, ligne); ligne+=16;
         gpJeu->affiche(image, "Spin attack: Hold square then dropped", 24, ligne); 
 #else
@@ -409,13 +409,13 @@ void Generique::initAide1() {
         gpJeu->affiche(image, "Spin attack: Z or W hold then dropped", 24, ligne); 
 #endif
         ligne+=16;}
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Item selection: Right D-Pad", 24, ligne); ligne+=16;
 #else
     gpJeu->affiche(image, "Item selection: Enter", 24, ligne); ligne+=16;
 #endif
     if (ligne >= 176) return;
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Use selected object: Triangle", 24, ligne); ligne+=16;
 #else
     gpJeu->affiche(image, "Use selected object: X", 24, ligne); ligne+=16;
@@ -430,7 +430,7 @@ void Generique::initAide1() {
         ligne+=16;}
     if (ligne >= 176) return;
     if (gpJoueur->hasObjet(O_CARTE))
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "See the map: Left D-Pad (outside or dungeons)", 24, ligne);
     else gpJeu->affiche(image, "See the map: Left D-Pad (in dungeons)", 24, ligne);
 #else
@@ -440,14 +440,14 @@ void Generique::initAide1() {
     ligne+=16;
     if (ligne >= 176) return;
     if (gpJoueur->hasObjet(O_ENCYCL)) {
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "See defeated monsters: Up D-Pad", 24, ligne);
 #else
         gpJeu->affiche(image, "See defeated monsters: M", 24, ligne);
 #endif
         ligne+=16;}
     if (ligne >= 176) return;
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Look around: Right stick", 24, ligne); ligne+=16;
     if (ligne >= 176) return;
     gpJeu->affiche(image, "Save / Quit: Start", 24, ligne); ligne+=16;
@@ -499,7 +499,7 @@ void Generique::initAide2() {
     
     gpJeu->affiche(image, "HELP 2/2", 40, 16);
     
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Return to the game: Cross - Previous: >", 24, 208);
 #else
     gpJeu->affiche(image, "Return to the game: Enter - Previous: Left", 24, 208);
@@ -512,14 +512,14 @@ void Generique::initAide2() {
     if (gpJoueur->hasObjet(O_BOTTES)) ligne+=16;
     if (gpJoueur->getEpee()) ligne+=32;
     if (ligne >= 64) 
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Use selected object: Triangle", 24, ligne); ligne+=16;
 #else
     gpJeu->affiche(image, "Use selected object: X", 24, ligne); ligne+=16;
 #endif
     if (ligne >= 64) 
     if (gpJoueur->hasObjet(O_GANTS)) {
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "Carry without select gloves: Cross", 24, ligne); 
 #else
         gpJeu->affiche(image, "Carry without select gloves: C", 24, ligne); 
@@ -527,7 +527,7 @@ void Generique::initAide2() {
         ligne+=16;}
     if (ligne >= 64) {
     if (gpJoueur->hasObjet(O_CARTE))
-#ifdef __PSP2__
+#ifdef __vita__
         gpJeu->affiche(image, "See the map: Left D-Pad (outside or dungeons)", 24, ligne);
     else gpJeu->affiche(image, "See the map: Left D-Pad (in dungeons)", 24, ligne);}
 #else
@@ -540,7 +540,7 @@ void Generique::initAide2() {
         gpJeu->affiche(image, "See defeated monsters: M", 24, ligne); 
         ligne+=16;}
     if (ligne >= 64) 
-#ifdef __PSP2__
+#ifdef __vita__
     gpJeu->affiche(image, "Look around: Right stick", 24, ligne); ligne+=16;
     if (ligne >= 64) 
     gpJeu->affiche(image, "Save / Quit: Start", 24, ligne); ligne+=16;
