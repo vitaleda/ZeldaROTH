@@ -42,7 +42,7 @@ SDL_Surface* init() {             // initialise SDL
     SDL_ShowCursor(SDL_DISABLE);
 
 #ifdef __vita__
-    return SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    return SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
 #endif
@@ -75,11 +75,8 @@ int main(int argc, char** argv) {
     int sw = (float)gpScreen->w*((float)sh/(float)gpScreen->h);
     int x = (960 - sw)/2;
     SDL_SetVideoModeScaling(x, 0, sw, sh);
-
-    SDL_Surface* gpScreen2 = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
-#else
-    SDL_Surface* gpScreen2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 320, 240, 32, 0, 0, 0, 0);
 #endif
+    SDL_Surface* gpScreen2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 320, 240, 32, 0, 0, 0, 0);
     SDL_Surface* gpScreen3 = NULL;
 
     Audio* gpAudio = new Audio();

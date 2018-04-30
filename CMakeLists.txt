@@ -60,7 +60,7 @@ target_link_libraries(${VITA_APPNAME}
   ogg
   jpeg
   png
-  vita2d
+  vitaGL
   z
   SceAudio_stub
   SceCtrl_stub
