@@ -26,6 +26,9 @@
 #include <imgui_vita.h>
 
 int _newlib_heap_size_user = 192 * 1024 * 1024;
+bool autohide = false;
+bool visible = false;
+bool fullscreen = false;
 bool bilinear = true;
 bool vflux_window = false;
 bool credits_window = false;
@@ -66,8 +69,19 @@ SDL_Surface* init() {             // initialise SDL
 void ImGui_callback() {
     ImGui_ImplVitaGL_NewFrame();
 
-    if (ImGui::BeginMainMenuBar()) {
+    if ((!autohide || visible) && ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("Graphics")) {
+            if (ImGui::MenuItem("Fullscreen", nullptr, fullscreen)) {
+                fullscreen = !fullscreen;
+                if (fullscreen) {
+                    SDL_SetVideoModeScaling(0, 0, 960, 544);
+                } else {
+                    int sh = 544;
+                    int sw = (float)320*((float)sh/(float)240);
+                    int x = (960 - sw)/2;
+                    SDL_SetVideoModeScaling(x, 0, sw, sh);
+                }
+            }
             if (ImGui::MenuItem("Bilinear Filter", nullptr, bilinear)) {
                 bilinear = !bilinear;
                 SDL_SetVideoModeBilinear(bilinear);
@@ -97,6 +111,13 @@ void ImGui_callback() {
                     SDL_SetVideoShader(SDL_SHADER_XBR_2X_FAST);
                 }
                 ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Options")) {
+            if (ImGui::MenuItem("Auto-hide menu bar", nullptr, autohide)) {
+                autohide = !autohide;
             }
             ImGui::EndMenu();
         }
@@ -143,7 +164,7 @@ void ImGui_callback() {
         float a;
         SceDateTime time;
         sceRtcGetCurrentClockLocalTime(&time);
-        if (time.hour < 6)        // Night/Early Morning
+        if (time.hour < 6)       // Night/Early Morning
             a = 0.25f;
         else if (time.hour < 10) // Morning/Early Day
             a = 0.1f;
@@ -151,7 +172,7 @@ void ImGui_callback() {
             a = 0.05f;
         else if (time.hour < 19) // Late day
             a = 0.15f;
-        else // Evening/Night
+        else                     // Evening/Night
             a = 0.2f;
         colors[3] = colors[7] = colors[11] = colors[15] = a;
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -172,9 +193,11 @@ void ImGui_callback() {
     sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
     uint64_t delta_touch = sceKernelGetProcessTimeWide() - tick;
     if (touch.reportNum > 0) {
+        visible = true;
         ImGui::GetIO().MouseDrawCursor = true;
         tick = sceKernelGetProcessTimeWide();
     } else if (delta_touch > 3000000) {
+        visible = false;
         ImGui::GetIO().MouseDrawCursor = false;
     }
 }
