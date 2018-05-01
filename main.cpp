@@ -242,7 +242,7 @@ int main(int argc, char** argv) {
     ImGui::StyleColorsDark();
     ImGui::GetIO().MouseDrawCursor = false;
 
-    SDL_SetVideoCallback(ImGui_callback);
+    SDL_SetVideoCallback(reinterpret_cast<void(*)(...)>(ImGui_callback));
 #endif
 
     Audio* gpAudio = new Audio();
