@@ -66,25 +66,90 @@ SDL_Surface* init() {             // initialise SDL
 }
 
 #ifdef __vita__
+void LoadSettings() {
+    FILE *fp = fopen("ux0:data/zroth/imgui.cfg", "rb");
+    if (fp) {
+        fseek(fp, 0, SEEK_SET);
+        fread(&autohide, sizeof(bool), 1, fp);
+        fread(&fullscreen, sizeof(bool), 1, fp);
+        fread(&bilinear, sizeof(bool), 1, fp);
+        fread(&vflux_enabled, sizeof(bool), 1, fp);
+        fread(&vcolors, 3 * sizeof(float), 1, fp);
+        fread(&shader, sizeof(SDL_Shader), 1, fp);
+        fclose(fp);
+    }
+}
+
+void SaveSettings() {
+    FILE *fp = fopen("ux0:data/zroth/imgui.cfg", "wb");
+    if (fp) {
+        fseek(fp, 0, SEEK_SET);
+        fwrite(&autohide, sizeof(bool), 1, fp);
+        fwrite(&fullscreen, sizeof(bool), 1, fp);
+        fwrite(&bilinear, sizeof(bool), 1, fp);
+        fwrite(&vflux_enabled, sizeof(bool), 1, fp);
+        fwrite(&vcolors, 3 * sizeof(float), 1, fp);
+        fwrite(&shader, sizeof(SDL_Shader), 1, fp);
+        fclose(fp);
+    }
+}
+
+void SetSettings() {
+    if (fullscreen) {
+        SDL_SetVideoModeScaling(0, 0, 960, 544);
+    } else {
+        int sh = 544;
+        int sw = (float)320 * ((float)sh / (float)240);
+        int x = (960 - sw) / 2;
+        SDL_SetVideoModeScaling(x, 0, sw, sh);
+    }
+
+    SDL_SetVideoModeBilinear(bilinear);
+    SDL_SetVideoShader(shader);
+
+    if (vflux_enabled) {
+        memcpy(&colors[0], vcolors, sizeof(float) * 3);
+        memcpy(&colors[4], vcolors, sizeof(float) * 3);
+        memcpy(&colors[8], vcolors, sizeof(float) * 3);
+        memcpy(&colors[12], vcolors, sizeof(float) * 3);
+
+        float c;
+        SceDateTime time;
+        sceRtcGetCurrentClockLocalTime(&time);
+        if (time.hour < 6)       // Night/Early Morning
+            c = 0.25f;
+        else if (time.hour < 10) // Morning/Early Day
+            c = 0.1f;
+        else if (time.hour < 15) // Mid day
+            c = 0.05f;
+        else if (time.hour < 19) // Late day
+            c = 0.15f;
+        else                     // Evening/Night
+            c = 0.2f;
+        colors[3] = colors[7] = colors[11] = colors[15] = c;
+    }
+}
+
 void ImGui_callback() {
     ImGui_ImplVitaGL_NewFrame();
 
     if ((!autohide || visible) && ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Save config", nullptr, nullptr)) {
+                SaveSettings();
+            }
+            if (ImGui::MenuItem("Reload config", nullptr, nullptr)) {
+                LoadSettings();
+            }
+            ImGui::EndMenu();
+        }
+
         if (ImGui::BeginMenu("Graphics")) {
             if (ImGui::MenuItem("Fullscreen", nullptr, fullscreen)) {
                 fullscreen = !fullscreen;
-                if (fullscreen) {
-                    SDL_SetVideoModeScaling(0, 0, 960, 544);
-                } else {
-                    int sh = 544;
-                    int sw = (float)320*((float)sh/(float)240);
-                    int x = (960 - sw)/2;
-                    SDL_SetVideoModeScaling(x, 0, sw, sh);
-                }
             }
             if (ImGui::MenuItem("Bilinear Filter", nullptr, bilinear)) {
                 bilinear = !bilinear;
-                SDL_SetVideoModeBilinear(bilinear);
             }
             if (ImGui::MenuItem("vFlux Config", nullptr, vflux_window)) {
                 vflux_window = !vflux_window;
@@ -92,23 +157,18 @@ void ImGui_callback() {
             if (ImGui::BeginMenu("Shaders")) {
                 if (ImGui::MenuItem("None", nullptr, shader == SDL_SHADER_NONE)) {
                     shader = SDL_SHADER_NONE;
-                    SDL_SetVideoShader(SDL_SHADER_NONE);
                 }
                 if (ImGui::MenuItem("Sharp Bilinear", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)) {
                     shader = SDL_SHADER_SHARP_BILINEAR_SIMPLE;
-                    SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR_SIMPLE);
                 }
                 if (ImGui::MenuItem("Sharp Bilinear (Scanlines)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)) {
                     shader = SDL_SHADER_SHARP_BILINEAR;
-                    SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR);
                 }
                 if (ImGui::MenuItem("LCD 3x", nullptr, shader == SDL_SHADER_LCD3X)) {
                     shader = SDL_SHADER_LCD3X;
-                    SDL_SetVideoShader(SDL_SHADER_LCD3X);
                 }
                 if (ImGui::MenuItem("xBR x2", nullptr, shader == SDL_SHADER_XBR_2X_FAST)) {
                     shader = SDL_SHADER_XBR_2X_FAST;
-                    SDL_SetVideoShader(SDL_SHADER_XBR_2X_FAST);
                 }
                 ImGui::EndMenu();
             }
@@ -155,26 +215,9 @@ void ImGui_callback() {
         ImGui::EndMainMenuBar();
     }
 
-    if (vflux_enabled) {
-        memcpy(&colors[0], vcolors, sizeof(float) * 3);
-        memcpy(&colors[4], vcolors, sizeof(float) * 3);
-        memcpy(&colors[8], vcolors, sizeof(float) * 3);
-        memcpy(&colors[12], vcolors, sizeof(float) * 3);
+    SetSettings();
 
-        float a;
-        SceDateTime time;
-        sceRtcGetCurrentClockLocalTime(&time);
-        if (time.hour < 6)       // Night/Early Morning
-            a = 0.25f;
-        else if (time.hour < 10) // Morning/Early Day
-            a = 0.1f;
-        else if (time.hour < 15) // Mid day
-            a = 0.05f;
-        else if (time.hour < 19) // Late day
-            a = 0.15f;
-        else                     // Evening/Night
-            a = 0.2f;
-        colors[3] = colors[7] = colors[11] = colors[15] = a;
+    if (vflux_enabled) {
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);
@@ -227,19 +270,17 @@ int main(int argc, char** argv) {
     int mode = 2; //mode=0;
 
     gpScreen = init();
-#ifdef __vita__
-    int sh = 544;
-    int sw = (float)gpScreen->w*((float)sh/(float)gpScreen->h);
-    int x = (960 - sw)/2;
-    SDL_SetVideoModeScaling(x, 0, sw, sh);
-#endif
     SDL_Surface* gpScreen2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 320, 240, 32, 0, 0, 0, 0);
     SDL_Surface* gpScreen3 = NULL;
 
 #ifdef __vita__
-    vindices = (uint16_t*)malloc(sizeof(uint16_t)*4);
-    colors = (float*)malloc(sizeof(float)*4*4);
-    vertices = (float*)malloc(sizeof(float)*3*4);
+    vindices = (uint16_t*)malloc(sizeof(uint16_t) * 4);
+    colors = (float*)malloc(sizeof(float) * 4 * 4);
+    vertices = (float*)malloc(sizeof(float) * 3 * 4);
+
+    LoadSettings();
+    SetSettings();
+
     vertices[0] =   0.0f;
     vertices[1] =   0.0f;
     vertices[2] =   0.0f;
