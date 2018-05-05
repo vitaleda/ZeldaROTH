@@ -110,7 +110,7 @@ void Carte::initEtage() {
     SDL_BlitSurface(tmp, &src, image, &dst);
     SDL_FreeSurface(tmp);
     
-    //étage de link
+    //Ã©tage de link
     tmp = gpJeu->loadImg("data/images/carte/link.png");
     SDL_SetColorKey(tmp,SDL_SRCCOLORKEY,SDL_MapRGB(tmp->format,0,0,255));
     src.h = 12; src.w = 14;src.x = 0;src.y=0;
@@ -183,7 +183,7 @@ void Carte::initCarte() {
     
     if (gpJoueur->getCle(zone-12,1)) initBoussole();
     
-    //étage de link
+    //Ã©tage de link
     if (gpJeu->getMonde()->etage() == levely) {
         tmp = gpJeu->loadImg("data/images/carte/link.png");
         SDL_SetColorKey(tmp,SDL_SRCCOLORKEY,SDL_MapRGB(tmp->format,0,0,255));
@@ -538,15 +538,15 @@ void Carte::initName() {
     int zone = gpJeu->getZone();
     //message
     switch (zone-12) {
-        case 0 : gpJeu->affiche(image, "Forest Temple",128,25); break;
-        case 1 : gpJeu->affiche(image, "Water Temple",128,25); break;
-        case 2 : gpJeu->affiche(image, "Mountain Temple",128,25); break;
-        case 3 : gpJeu->affiche(image, "Desert Temple",128,25); break;
-        case 4 : gpJeu->affiche(image, "Dark Temple",128,25); break;
-        case 5 : gpJeu->affiche(image, "Fire Temple",128,25); break;
-        case 6 : gpJeu->affiche(image, "Ice Temple",128,25); break;
-        case 7 : gpJeu->affiche(image, "Hidden Temple",128,25); break;
-        case 8 : gpJeu->affiche(image, "Hyrule Castle",128,25); break;
+        case 0 : gpJeu->afficheTexteAvecId(image, 0,128,25); break;
+        case 1 : gpJeu->afficheTexteAvecId(image, 1,128,25); break;
+        case 2 : gpJeu->afficheTexteAvecId(image, 2,128,25); break;
+        case 3 : gpJeu->afficheTexteAvecId(image, 3,128,25); break;
+        case 4 : gpJeu->afficheTexteAvecId(image, 4,128,25); break;
+        case 5 : gpJeu->afficheTexteAvecId(image, 5,128,25); break;
+        case 6 : gpJeu->afficheTexteAvecId(image, 6,128,25); break;
+        case 7 : gpJeu->afficheTexteAvecId(image, 7,128,25); break;
+        case 8 : gpJeu->afficheTexteAvecId(image, 8,128,25); break;
     }
 }
 

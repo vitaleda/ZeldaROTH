@@ -10,6 +10,7 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_rotozoom.h>
+#include "vita/os_vita.h"
 
 #include <iostream>
 #include <ctime>
@@ -18,6 +19,7 @@
 #include "Generique.h"
 
 #ifdef __vita__
+#include <psp2/apputil.h> 
 #include <psp2/power.h>
 #include <psp2/kernel/processmgr.h>
 #include <psp2/io/fcntl.h>
@@ -25,6 +27,7 @@
 #include <vitaGL.h>
 #include <imgui_vita.h>
 
+uint8_t language = 1;
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 bool autohide = false;
 bool visible = false;
@@ -53,16 +56,31 @@ SDL_Surface* init() {             // initialise SDL
     SDL_WM_SetCaption("Return of the Hylian",NULL);
     SDL_Surface* icon = SDL_LoadBMP("data/images/logos/triforce.ico");
     SDL_SetColorKey(icon,SDL_SRCCOLORKEY,SDL_MapRGB(icon->format,0,0,0));
-    SDL_WM_SetIcon(icon,NULL);
+    SDL_WM_SetIcon(icon,NULL);    
 #endif
 
     SDL_ShowCursor(SDL_DISABLE);
 
+    language = 1;
+	
 #ifdef __vita__
+
     return SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
 #endif
+}
+
+int getLanguage(void)
+{    
+	return language;
+}
+
+void setLanguage(Jeu* gpJeu, int languageID)
+{
+	if (languageID>MAX_LANG || languageID<MIN_LANG) language = DEFAULT_LANG;
+	else language = languageID;
+    gpJeu->setTextLanguage(language);
 }
 
 #ifdef __vita__
@@ -198,9 +216,10 @@ void ImGui_callback() {
 
         if (credits_window) {
             ImGui::Begin("Credits", &credits_window);
-            ImGui::TextColored(ImVec4(255, 255, 0, 255), "Zelda: Return of the Hylian v1.2.1");
+            ImGui::TextColored(ImVec4(255, 255, 0, 255), "Zelda: Return of the Hylian v1.2.2");
             ImGui::Text("Game Creator: Vincent Jouillat");
             ImGui::Text("Port Author: usineur");
+            ImGui::Text("Added french translation: NicolasR");
             ImGui::Separator();
             ImGui::TextColored(ImVec4(255, 255, 0, 255), "Special thanks to:");
             ImGui::Text("Rinnegatamante: SDL 1.2 and imgui Vita ports");
@@ -257,7 +276,7 @@ int main(int argc, char** argv) {
     sceIoMkdir("ux0:data/zroth/save", 0777);
 #endif
 
-    if (argc && argv); //pour éviter un warning.....
+    if (argc && argv); //pour Ã©viter un warning.....
 
     std::srand(std::time(NULL));
 
@@ -311,6 +330,39 @@ int main(int argc, char** argv) {
 
     Audio* gpAudio = new Audio();
     Jeu* gpJeu = new Jeu(gpAudio);
+
+
+    // Init SceAppUtil
+	SceAppUtilInitParam init_param;
+	SceAppUtilBootParam boot_param;
+	memset(&init_param, 0, sizeof(SceAppUtilInitParam));
+	memset(&boot_param, 0, sizeof(SceAppUtilBootParam));
+	sceAppUtilInit(&init_param, &boot_param);
+
+#ifdef __vita__
+    // Getting system language
+    int lang = 0;
+    sceAppUtilSystemParamGetInt(SCE_SYSTEM_PARAM_ID_LANG, &lang);
+	switch (lang){
+		case SCE_SYSTEM_PARAM_LANG_FRENCH:
+			language = LANG_FR;
+			break;
+		case SCE_SYSTEM_PARAM_LANG_SPANISH:
+			language = 5;
+			break;
+		case SCE_SYSTEM_PARAM_LANG_ITALIAN:
+			language = 4;
+			break;
+		default:
+			language = LANG_EN;
+			break;
+	}
+
+    setLanguage(gpJeu, language);
+#else
+    setLanguage(gpJeu, DEFAULT_LANG);
+#endif
+
     Carte* gpCarte = new Carte(gpJeu);
     Encyclopedie* gpEncyclopedie = new Encyclopedie(gpJeu);
     Keyboard* gpKeyboard = new Keyboard(gpJeu, gpCarte, gpEncyclopedie, gpScreen, mode);
@@ -336,7 +388,7 @@ int main(int argc, char** argv) {
             case 1 : //disclamer
             case 2 : //logo
             case 3 : //titre
-            case 14 : //générique score
+            case 14 : //gÃ©nÃ©rique score
             case 17 : //menu d'aide 1
             case 18 : //menu d'aide 2
                 gpGenerique->draw(gpScreen2); break;
@@ -349,23 +401,23 @@ int main(int argc, char** argv) {
             case 7 : //charger partie
                 gpGenerique->drawCharger(gpScreen2, gpKeyboard->getLigne(),
                     gpKeyboard->getLigneVal()); break;
-            case 8 : //générique intro
+            case 8 : //gÃ©nÃ©rique intro
                 gpGenerique->drawIntro(gpScreen2, gpKeyboard->getIntro()); break;
             case 9 : //effacer partie
                 gpGenerique->drawEffacerSave(gpScreen2, gpKeyboard->getLigne(),
                     gpKeyboard->getLigneVal()); break;
-            case 10 : //générique début chez link
+            case 10 : //gÃ©nÃ©rique dÃ©but chez link
                 gpGenerique->drawDebut(gpScreen2); break;
-            case 11 : //générique fin
+            case 11 : //gÃ©nÃ©rique fin
                 gpGenerique->drawFin(gpScreen2); break;
             case 12 : //carte
                 gpCarte->draw(gpScreen2); break;
-            case 13 : //encyclopédie des monstres
+            case 13 : //encyclopÃ©die des monstres
                 gpEncyclopedie->draw(gpScreen2); break;
             case 15 : //records
             case 19 : //rang 100%
             case 20 : //rang ultime
-            case 21 : //rang de rapidité
+            case 21 : //rang de rapiditÃ©
                 gpGenerique->drawRecord(gpScreen2, gpKeyboard->getLigneRecord(),
                     gpKeyboard->getColonneRecord()); break;
             case 16 : //effacer record
