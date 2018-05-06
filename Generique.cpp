@@ -11,7 +11,7 @@
 #include "Generique.h"
 #include "Jeu.h"
 #include "Keyboard.h"
-#include "vita/os_vita.h"
+#include "Lang.h"
 
 Generique::Generique(Jeu* jeu) : gpJeu(jeu), anim(0) {
     imageFin = NULL;
