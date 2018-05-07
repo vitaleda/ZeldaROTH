@@ -57,14 +57,14 @@ SDL_Surface* init() {             // initialise SDL
     SDL_WM_SetCaption("Return of the Hylian",NULL);
     SDL_Surface* icon = SDL_LoadBMP("data/images/logos/triforce.ico");
     SDL_SetColorKey(icon,SDL_SRCCOLORKEY,SDL_MapRGB(icon->format,0,0,0));
-    SDL_WM_SetIcon(icon,NULL);
+    SDL_WM_SetIcon(icon,NULL);    
 #endif
 
     SDL_ShowCursor(SDL_DISABLE);
 
     language = 1;
-
 #ifdef __vita__
+
     return SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #else
     return SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
@@ -216,9 +216,10 @@ void ImGui_callback() {
 
         if (credits_window) {
             ImGui::Begin("Credits", &credits_window);
-            ImGui::TextColored(ImVec4(255, 255, 0, 255), "Zelda: Return of the Hylian v1.2.2");
+            ImGui::TextColored(ImVec4(255, 255, 0, 255), "Zelda: Return of the Hylian v1.2.3");
             ImGui::Text("Game Creator: Vincent Jouillat");
             ImGui::Text("Port Author: usineur");
+            ImGui::Text("Added french translation: NicolasR");
             ImGui::Separator();
             ImGui::TextColored(ImVec4(255, 255, 0, 255), "Multilingual support");
             ImGui::Text("French translation: NicolasR");
@@ -349,11 +350,11 @@ int main(int argc, char** argv) {
         case SCE_SYSTEM_PARAM_LANG_FRENCH:
             language = LANG_FR;
             break;
-        case SCE_SYSTEM_PARAM_LANG_SPANISH:
-            language = 5;
+        case SCE_SYSTEM_PARAM_LANG_GERMAN:
+            language = LANG_DE;
             break;
-        case SCE_SYSTEM_PARAM_LANG_ITALIAN:
-            language = 4;
+        case SCE_SYSTEM_PARAM_LANG_SPANISH:
+            language = LANG_ES;
             break;
         default:
             language = LANG_EN;

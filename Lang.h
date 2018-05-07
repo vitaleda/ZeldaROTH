@@ -26,10 +26,12 @@ ID   Description
 
 enum Languages {
     LANG_EN = 1,
-    LANG_FR = 2
+    LANG_FR = 2,
+    LANG_DE = 3,
+    LANG_ES = 4
 };
 
-const int MIN_LANG = LANG_EN, MAX_LANG = LANG_FR, DEFAULT_LANG = LANG_EN;
+const int MIN_LANG = LANG_EN, MAX_LANG = LANG_ES, DEFAULT_LANG = LANG_EN;
 
 int getLanguage(void);
 void setLanguage(Jeu* gpJeu, int languageID);
