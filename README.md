@@ -1,13 +1,7 @@
-# Port of Zelda Time Return of the Hylian to PS Vita (French Version)
-
-# Why this fork ?
-The main goal was to have a french version of this game because i'm french :)
-The second one was to correct some missing references on compilation files.
-
-Thanks to usineur for his work and help.
+# Port of Zelda Time Return of the Hylian to PS Vita
 
 ## VPK
-Latest version is available [here](https://github.com/NicolasR/ZeldaROTH-French/releases).
+Latest version is available [here](https://github.com/usineur/ZeldaROTH/releases/latest).
 
 Note: saves can be found in `ux0:data/zroth/save` directory.
 
@@ -44,17 +38,11 @@ Vincent Jouillat - Original game (http://www.zeldaroth.fr/us/zroth.php)
 
 ## Changelog:
 
-1.2.4:
-- Added Spanish translation
-- Corrected display for multilingual support
-
-1.2.3:
-- Added German translation
-
-1.2.2:
-- Added missing translation
-- Added option to change language
-- Added language detection (by reading Vita system language)
+1.3:
+- Many thanks to @NicolasR for:
+    - Multilingual support
+    - Language detection
+    - Integration of French, German and Spanish translations
 
 1.2.1:
 - Add "Fullscreen" option
@@ -63,9 +51,6 @@ Vincent Jouillat - Original game (http://www.zeldaroth.fr/us/zroth.php)
 
 1.2:
 - SDL 1.2 (vitaGL) + imgui support (thx to @Rinnegatamante)
-
-1.1b:
-- Added missing translations
 
 1.1:
 - Improve performances (Fix memory leaks, smoother animation)
