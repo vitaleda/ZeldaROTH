@@ -859,10 +859,10 @@ int Keyboard::stickPosition(int stick, int direction) {
     if (stick == RSTICK && (direction == STICK_UP || direction == STICK_DOWN)) axis = 3; // Right stick, vertical axis
 
     axisValue = SDL_JoystickGetAxis(joystick, axis); // range is -32768 to 32767
-    if ((axisValue < -31000 && direction == STICK_LEFT)
-      || (axisValue > 31000 && direction == STICK_RIGHT)
-      || (axisValue < -31000 && direction == STICK_UP)
-      || (axisValue > 31000 && direction == STICK_DOWN)) return 1;
+    if ((axisValue < -16384 && direction == STICK_LEFT)
+      || (axisValue > 16384 && direction == STICK_RIGHT)
+      || (axisValue < -16384 && direction == STICK_UP)
+      || (axisValue > 16384 && direction == STICK_DOWN)) return 1;
     else return 0;
 #else
     return 0;
