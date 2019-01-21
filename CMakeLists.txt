@@ -19,6 +19,10 @@ include("${VITASDK}/share/vita.cmake" REQUIRED)
 # Flags and includes
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
 
+include_directories(
+  ${VITASDK}/arm-vita-eabi/include/SDL
+)
+
 link_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -57,6 +61,7 @@ target_link_libraries(${VITA_APPNAME}
   vorbisfile
   vorbis
   ogg
+  mikmod
   jpeg
   png
   vitaGL
